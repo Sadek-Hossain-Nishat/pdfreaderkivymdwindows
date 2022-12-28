@@ -1,7 +1,6 @@
 import os
 
 
-
 os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
 
 from CustomImageView import CustomImageView
@@ -10,6 +9,8 @@ from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.toast import toast
 from kivymd.uix.recycleview import MDRecycleView
+
+from kivymd.uix.fitimage import FitImage
 from kivy.uix.image import Image
 
 
@@ -41,9 +42,12 @@ MDBoxLayout:
        
       
         RecycleBoxLayout:
-            default_size: None, dp(56)
+            default_size: root.width, dp(56)
             default_size_hint: 1, None
-            size_hint_y: None
+            size_hint: [1,None]
+            size:[root.width,self.minimum_height]
+            width:root.width
+
             height: self.minimum_height
             orientation: 'vertical'
     
@@ -57,7 +61,7 @@ class RecyclerViewPython(MDRecycleView):
         super(RecyclerViewPython, self).__init__(**kwargs)
 
 
-        self.data = [{'source': str(x)} for x in []]
+        self.data = [{'source': str(x),'size_hint':[1,None],'size':[1200,600],} for x in []]
 
 
 
@@ -91,7 +95,9 @@ class Example(MDApp):
             if paisi.img_object_li!=None:
                 self.root.ids.rv.data = [{'source': str(x)} for x in []]
                 print('data is exists')
-                self.root.ids.rv.data=[{'source': str(x)} for x in paisi.img_object_li]
+                self.root.ids.rv.data=[{'source': str(x),'size_hint':[1,None],'size':[self.root.width,600],
+                                        'pos_hint':{'center_x':.5,'center_y':.7}} for x in paisi.img_object_li]
+                print(self.root)
         except Exception as e:
             toast('No file is selected')
             print(f'{e}')
